@@ -3,12 +3,63 @@
 <head>
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="styles.css">
-	<title>Document</title>
+	<title>
+		Senior High Schools In Ghana | Filterable Table
+	</title>
 </head>
-<body>
-	<div class="table-container"></div>
+<body class="loading">
+	<div id="loader"></div>
+	<header>
+		<h1>Senior High Schools in Ghana</h1>
+		<small>
+			data source: 
+			<a 
+				href="https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana"
+			>Wikipedia</a>
+		</small>
+	</header>
+	<div class="container">
+		<div class="filter">
+			<h3>Filter By:</h3>
+			<div class="select" id="region">
+				<h4 class="header">Region</h4>
+				<div class="options">
+					<p class="option locked selected">All</p>
+				</div>
+			</div>
+			<div class="select" id="district">
+				<h4 class="header">District</h4>
+				<div class="options">
+					<p class="option locked selected">All</p>
+				</div>
+			</div>
+			<div class="select" id="type">
+				<h4 class="header">Type</h4>
+				<div class="options">
+					<p class="option locked selected">All</p>
+				</div>
+			</div>
+		</div>
+		<div class="table-container">
+			<p class="results">
+				Showing results for 
+				<strong id="res-type">...</strong> 
+				in the 
+				<strong id="res-district">...</strong> 
+				of the 
+				<strong id="res-region">...</strong>
+			</p>
+			<table>
+				<thead>
+					<tr></tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	<script src="crawler.js"></script>
-	<script src="select.js"></script>
+	<script src="custom-select.js"></script>
 	<script src="index.js"></script>
 </body>
 </html>

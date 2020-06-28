@@ -1,65 +1,169 @@
-:root {
-  --r: 4px;
+body {
+	margin: 0;
+	font-family: Roboto, sans-serif;
+
 }
 
- /* The container must be positioned relative: */
-.custom-select {
-  width: 200px;
-  position: relative;
-  font-family: Roboto, sans-serif;
+#loader {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 4px;
+	width: 100%;
+	background-color: teal;
+	animation: load 1.2s ease-in-out infinite;
+	z-index: 1;
 }
 
-.custom-select select {
-  display: none; /*hide original SELECT element: */
+header {
+	padding: 20px 2.5vw;
+	border-bottom: 1px solid #ebebeb;
+	position: sticky;
+	top: 0;
+	background-color: #fff
 }
 
-.select-selected {
-  border-radius: var(--r);
-  background-color: DodgerBlue;
+header > * {
+	margin: 0;
 }
 
-/* Style the arrow inside the select element: */
-.select-selected:after {
-  position: absolute;
-  content: "";
-  top: 14px;
-  right: 10px;
-  width: 0;
-  height: 0;
-  border: 6px solid transparent;
-  border-color: #fff transparent transparent transparent;
+header h1 {
+	font-family: 'Product Sans', sans-serif
+
 }
 
-/* Point the arrow upwards when the select box is open (active): */
-.select-selected.select-arrow-active:after {
-  border-color: transparent transparent #fff transparent;
-  top: 7px;
+.container {
+	margin: 0 1vw 0 2.5vw;
+	display: flex;
+	justify-content: space-between;
+	height: 81vh;
+	padding: 20px 0
 }
 
-/* style the items (options), including the selected item: */
-.select-items div,.select-selected {
-  color: #ffffff;
-  padding: 8px 16px;
-  border: 1px solid transparent;
-  border-top-color: rgba(0, 0, 0, 0.1);
-  cursor: pointer;
+.table-container::-webkit-scrollbar,
+.filter::-webkit-scrollbar {
+    background-color: #f0f0f0;
+    width: 6px;
+    border-radius: calc(6px / 2);
+    transition: width .5s ease-in-out;
 }
 
-/* Style items (options): */
-.select-items {
-  position: absolute;
-  background-color: DodgerBlue;
-  top: 100%;
-  left: 0;
-  right: 0;
-  z-index: 99;
+.table-container::-webkit-scrollbar-thumb,
+.filter::-webkit-scrollbar-thumb {
+    background-color: #d2d2d2;
+    border-radius: calc(6px / 2);
 }
 
-/* Hide the items when the select box is closed: */
-.select-hide {
-  display: none;
+.table-container {
+	flex-basis: 79%;
+	overflow-y: auto;
+	/*padding: 20px;*/
 }
 
-.select-items div:hover, .same-as-selected {
-  background-color: rgba(0, 0, 0, 0.1);
-} 
+.table-container .results {
+	/*font-size: .9rem;*/
+}
+
+table {
+	/*width: 100%;*/
+	/*margin: auto;*/
+	/*margin-left: 3%;*/
+	border-spacing: 0;
+	/*border-collapse: unset;*/
+	padding-right: 40px;
+}
+
+thead th {
+	/*border: 1px solid #efefef;*/
+}
+
+/*thead tr {
+	background-color: #202020;
+	color: #fff;
+}*/
+
+tbody td,
+thead th {
+	border: 0 solid #c4c4c4;
+	border-width: 1px 0px 1px 1px;
+}
+
+tbody td:last-child,
+thead th:last-child {
+	border-right-width: 1px;
+}
+
+th, td {
+	width: 250px;
+    overflow: hidden;
+	padding: 6px;
+}
+
+th {
+	overflow: hidden;
+	resize: horizontal;
+
+}
+
+.filter {
+	flex-basis: 17%;
+	padding-right: 15px;
+	overflow-y: auto;
+}
+
+.select {
+	margin-bottom: 5vh;
+	cursor: pointer;
+	/*overflow: hidden;*/
+	/*box-shadow: 0px 0px 4px #c4c4c4*/
+}
+
+.select.collapsed .header {
+	border-radius: 6px;
+}
+
+.select.collapsed .options {
+	display: none
+}
+
+.options {
+	border: 1px solid #d2d2d2;
+	border-radius: 0 0 6px 6px
+}
+
+.select * {
+	margin: 0;
+}
+
+.header {
+	border-radius: 6px 6px 0 0 ;
+	padding: 10px;
+	background-color: teal;
+	color: #fff;
+	font-weight: normal;
+	/*neo-tort*/
+}
+
+.options {
+	transition: height .5s ease-in-out .1s
+}
+
+.option {
+	padding: 10px;
+	font-size: .85rem;
+	cursor: pointer;
+	border-bottom: 1px solid #d2d2d2
+}
+
+.option:last-child {
+	border-bottom: none
+}
+
+.selected,
+.option:hover {
+	background-color: #ebebeb;
+}
+
+@keyframes load {
+	to { filter: hue-rotate(360deg); }
+}
