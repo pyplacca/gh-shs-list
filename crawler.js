@@ -124,13 +124,14 @@ function getRowData(row, src_obj) {
 	const data = {}
 	for (key in src_obj) {
 		if (key) {
+			elm = row[src_obj[key]+'']
 			const text = flatText(
-				// ['School', 'Website'].includes(key) ? 
-				// 	elm.innerHTML : 
-				// 	elm.innerText
-				row[src_obj[key]+''].innerText
+				['School', 'Website'].includes(key) ? 
+					elm.innerHTML : 
+					elm.innerText
+				// row[src_obj[key]+''].innerText
 			)
-			data[key] = text == 'public' ? 'Public School' : text
+			data[key] = ['public', 'Public School'].includes(text) ? 'Public school' : text
 		}
 	}
 	return data
@@ -149,4 +150,14 @@ function populateTableBody(arr) {
 		'beforeend', `<td>${info}</td>`
 	))
 	table_body.appendChild(tr)
+	// fix hyperlinks
+	const children = table_body.children
+	for (anchor of children[(children.length-1) + ''].getElementsByTagName('a')) {
+		const href = anchor.getAttribute('href')
+		anchor.setAttribute(
+			'href', 
+			(!href.startsWith('http') ? 'https://wikipedia.org/' : '') + href
+		) 
+		anchor.setAttribute('target', '_blank')
+	}
 }
