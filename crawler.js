@@ -2,23 +2,18 @@ const [
 	cors_api,
 	url,
 	list,
-	flatText,
 	none,
-	[table_head, table_body, loader]
+	[TABLE_HEAD, TABLE_BODY, LOADER]
 ] = [
 	'https://cors-anywhere.herokuapp.com/',
 	'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
 	(collection) => Array(...collection),
-	(string) => {
-		return string
-			.replace(/\[\d*\]|\n/gi, '')
-			.replace(/ and ranked as.+\{\{.+\}\}/, '')
-	},
 	'Unknown',
 	['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q))
 ]
 
-let global_res, global_heads
+let RESULT, HEADS
+const SCHOOL_TYPES = new Set()
 
 const retriever = 
 	fetch(cors_api + url)
@@ -63,7 +58,7 @@ const retriever =
 					result[region][district].push(
 						row_data
 					)
-					populateTableBody(Object.values(row_data))
+					populateTableBody(Object.assign(row_data, {region, district}))
 				}
 			}
 
@@ -82,18 +77,33 @@ const retriever =
 		// remove loader
 		loader.parentNode.removeChild(loader)
 		// assign global variables
-		global_res = result
-		global_heads = heads
+		RESULT = result
+		HEADS = heads
 		return {heads, result}
 	})
-	.catch(({message}) => {
-		console.log(message)
-		loader.parentNode.removeChild(loader)
-		alert('Couldn\'t load page. Please check your internet connection and reload.')
-	})
+	// .catch(({message}) => {
+	// 	console.log(message)
+	// 	loader.parentNode.removeChild(loader)
+	// 	alert('Couldn\'t load page. Please check your internet connection and reload.')
+	// })
 
 
 // Functions
+
+String.prototype.toTitleCase = function () {
+    return this ? 
+    	this
+	    	.split(' ')
+	    	.map(w => w ? w[0].toUpperCase() + w.substr(1).toLowerCase() : w)
+	    	.join(' ') : 
+    	this
+}
+
+function flatText (string) {
+	return string
+		.replace(/\[\d*\]|\n/gi, '')
+		.replace(/ and ranked as.+\{\{.+\}\}/, '')
+}
 
 function getHeaders(thead) {
 	const headers = list(thead.firstElementChild.children)
@@ -125,34 +135,77 @@ function getRowData(row, src_obj) {
 	for (key in src_obj) {
 		if (key) {
 			elm = row[src_obj[key]+'']
-			const text = flatText(
-				['School', 'Website'].includes(key) ? 
-					elm.innerHTML : 
-					elm.innerText
-				// row[src_obj[key]+''].innerText
+			let text = flatText(
+				['School', 'Website']
+				.includes(key) ? elm.innerHTML : elm.innerText
 			)
-			data[key] = ['public', 'Public School'].includes(text) ? 'Public school' : text
+
+			let temp
+			if (key === 'Type') {
+				// clean up Type data
+				temp = cleanUpType(text)
+			}
+			data[key] = temp || text
 		}
 	}
 	return data
 }
 
+function cleanUpType(string) {
+	string = ['public', 'Public School'].includes(string) ? 'Public school' : string
+	string = string == 'CommercialySchool' ? 'Commercial school' : string
+	string = string.toTitleCase()
+
+	if (string) {
+		string = string
+			.replace(/institute/gi, 'school')
+			.match(/ ?\w+ ?school/gi)
+		if (string) {
+			let clean = ''
+			string.forEach(sch => {
+				sch = sch.trim().toTitleCase()
+				if (sch) {
+					clean = clean ? clean + ', ' + sch : sch
+					SCHOOL_TYPES.add(sch.trim().toTitleCase())
+				}
+			})
+			string = clean
+		} else {
+			SCHOOL_TYPES.add(string)
+		}
+	}
+
+	return string
+}
+
 function setTableHeaders(arr) {
 	// set table headers
 	arr.forEach(th => {
-		table_head.insertAdjacentHTML('beforeend', `<th>${th}</th>`)
+		TABLE_HEAD.insertAdjacentHTML('beforeend', `<th>${th}</th>`)
 	}) 
 }
 
-function populateTableBody(arr) {
+function populateTableBody(obj) {
+	const vals = Object.values(obj)
+	const arr = vals.slice(0, vals.length-2)
+
 	const tr = document.createElement('tr')
 	arr.forEach(info => tr.insertAdjacentHTML(
 		'beforeend', `<td>${info}</td>`
 	))
-	table_body.appendChild(tr)
+	// set attribute for easy filtering
+	tr.setAttribute('region', obj.region)
+	tr.setAttribute('district', obj.district)
+	tr.setAttribute('type', vals[1])
+	tr.setAttribute(
+		'title', 
+		'Region: ' + obj.region + ' - ' + 'District: ' + obj.district
+	)
+	TABLE_BODY.appendChild(tr)
 	// fix hyperlinks
-	const children = table_body.children
-	for (anchor of children[(children.length-1) + ''].getElementsByTagName('a')) {
+	const children = TABLE_BODY.children
+	const last_child = children[(children.length-1) + '']
+	for (anchor of last_child.getElementsByTagName('a')) {
 		const href = anchor.getAttribute('href')
 		anchor.setAttribute(
 			'href', 
