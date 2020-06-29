@@ -194,14 +194,11 @@ function populateTableBody(obj) {
 		'beforeend', 
 		`<td>${info}</td>`
 	))
-	// set attribute for easy filtering
+	// set attributes for easy filtering
 	tr.setAttribute('region', obj.region)
 	tr.setAttribute('district', obj.district)
 	tr.setAttribute('type', vals[1])
-	tr.setAttribute(
-		'title', 
-		`Region: ${obj.region} - District: ${obj.district}`
-	)
+	tr.setAttribute('title', `${obj.region} - ${obj.district}`)
 	TABLE_BODY.appendChild(tr)
 	// fix hyperlinks
 	const children = TABLE_BODY.children

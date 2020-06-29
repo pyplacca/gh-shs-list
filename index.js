@@ -17,6 +17,7 @@ RETRIEVER
 
 function selectFilter () {
 	if (!this.classList.contains('selected')) {
+		document.body.style.cursor = 'progress'
 		// remove "selected" tag from perviously selected option
 		this
 			.parentNode
@@ -107,6 +108,7 @@ function filterTable() {
 			tr.classList.add('hide')
 		}
 	}
+	document.body.style.cursor = 'unset'
 }
 
 const getClassElems = cls => document.getElementsByClassName(cls);
