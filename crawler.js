@@ -15,7 +15,7 @@ const [
 let RESULT, HEADS
 const SCHOOL_TYPES = new Set()
 
-const retriever = 
+const RETRIEVER = 
 	fetch(cors_api + url)
 	.then(res => res.text())
 	.then(text => {
@@ -81,11 +81,11 @@ const retriever =
 		HEADS = heads
 		return {heads, result}
 	})
-	// .catch(({message}) => {
-	// 	console.log(message)
-	// 	loader.parentNode.removeChild(loader)
-	// 	alert('Couldn\'t load page. Please check your internet connection and reload.')
-	// })
+	.catch(({message}) => {
+		console.log(message)
+		loader.parentNode.removeChild(loader)
+		alert('Couldn\'t load page. Please check your internet connection and reload.')
+	})
 
 
 // Functions
@@ -191,7 +191,8 @@ function populateTableBody(obj) {
 
 	const tr = document.createElement('tr')
 	arr.forEach(info => tr.insertAdjacentHTML(
-		'beforeend', `<td>${info}</td>`
+		'beforeend', 
+		`<td>${info}</td>`
 	))
 	// set attribute for easy filtering
 	tr.setAttribute('region', obj.region)
@@ -199,7 +200,7 @@ function populateTableBody(obj) {
 	tr.setAttribute('type', vals[1])
 	tr.setAttribute(
 		'title', 
-		'Region: ' + obj.region + ' - ' + 'District: ' + obj.district
+		`Region: ${obj.region} - District: ${obj.district}`
 	)
 	TABLE_BODY.appendChild(tr)
 	// fix hyperlinks

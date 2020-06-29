@@ -1,28 +1,18 @@
-// const [
-// 	region_filter, 
-// 	type_filter, 
-// 	district_filter
-// ] = [
-// 	'#region', 
-// 	'#type', 
-// 	'#district'
-// ]
-// .map(query => document.querySelector(query + ' .options'))
-
 const filters = {
 	Region: ['All', filterTableByRegion], 
 	District: ['All', filterTable],
 	Type: ['All', filterTable], 
 }
 
-retriever.then(({heads, result}) => {
+RETRIEVER
+.then(({heads, result}) => {
 	setOptions('#region', Object.keys(result))
 	setOptions('#type', SCHOOL_TYPES)
 })
-// .catch(({message}) => {
-// 	console.log(message)
-// 	LOADER.parentNode.removeChild(LOADER)
-// })
+.catch(({message}) => {
+	console.log(message)
+	LOADER.parentNode.removeChild(LOADER)
+})
 
 
 function selectFilter () {
@@ -49,7 +39,7 @@ function selectFilter () {
 		document
 			.querySelector('#res-' + select.toLowerCase())
 			.innerText = this.innerText === 'All' ? 
-				'All ' + select + 's' : 
+				`All ${select}s` : 
 					this.innerText
 
 		// filter table and category filters if necessary
