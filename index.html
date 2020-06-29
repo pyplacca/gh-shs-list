@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+    <link rel="icon" href="./gh.svg">
 	<link rel="stylesheet" href="styles.css">
 	<title>
 		Senior High Schools In Ghana | Filterable Table
 	</title>
 </head>
-<body class="loading">
+<body>
 	<div id="loader"></div>
 	<header>
 		<h1>Senior High Schools in Ghana - Filterable Table</h1>
@@ -25,19 +26,19 @@
 		<div class="filter">
 			<h3>Filter By:</h3>
 			<div class="select" id="region">
-				<h4 class="header">Region</h4>
+				<h4 class="header" title="Click to collapse">Region</h4>
 				<div class="options">
 					<p class="option locked selected">All</p>
 				</div>
 			</div>
 			<div class="select" id="district">
-				<h4 class="header">District</h4>
+				<h4 class="header" title="Click to collapse">District</h4>
 				<div class="options">
 					<p class="option locked selected">All</p>
 				</div>
 			</div>
 			<div class="select" id="type">
-				<h4 class="header">Type</h4>
+				<h4 class="header" title="Click to collapse">Type</h4>
 				<div class="options">
 					<p class="option locked selected">All</p>
 				</div>
@@ -46,11 +47,11 @@
 		<div class="table-container">
 			<p class="results">
 				Showing results for 
-				<strong id="res-type">...</strong> 
-				in the 
-				<strong id="res-district">...</strong> 
-				of the 
-				<strong id="res-region">...</strong>
+				<strong id="res-type">All Types</strong> 
+				in 
+				<strong id="res-district">All Districts</strong> 
+				of 
+				<strong id="res-region">All Regions</strong>
 			</p>
 			<table>
 				<thead>
