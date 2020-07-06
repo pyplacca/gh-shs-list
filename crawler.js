@@ -1,22 +1,24 @@
+let RESULT, HEADS
+
 const [
 	cors_api,
-	url,
-	list,
+	wiki_url,
 	none,
-	[TABLE_HEAD, TABLE_BODY, LOADER]
+	[TABLE_HEAD, TABLE_BODY, LOADER],
+	SCHOOL_TYPES,
+	TABLE_ROWS
 ] = [
 	'https://cors-anywhere.herokuapp.com/',
 	'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
-	(collection) => Array(...collection),
 	'Unknown',
-	['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q))
+	['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q)),
+	new Set(),
+	[]
 ]
 
-let RESULT, HEADS
-const SCHOOL_TYPES = new Set()
 
 const RETRIEVER = 
-	fetch(cors_api + url)
+	fetch(cors_api + wiki_url)
 	.then(res => res.text())
 	.then(text => {
 		const [dom, result] = [
@@ -39,7 +41,7 @@ const RETRIEVER =
 			result[region] = {}
 
 			let district
-			for (row of tbody.children) {
+			for (let row of tbody.children) {
 				const childs = row.children
 
 				if (childs.length < 3) {
@@ -58,7 +60,9 @@ const RETRIEVER =
 					result[region][district].push(
 						row_data
 					)
-					populateTableBody(Object.assign(row_data, {region, district}))
+					TABLE_ROWS.push(createTableRow(
+						Object.assign(row_data, {region, district})
+					))
 				}
 			}
 
@@ -67,13 +71,10 @@ const RETRIEVER =
 			}
 
 			if ('' in result[region]) {
-				!result[region][''].length ? 
-					delete result[region][''] : null
+				// !result[region][''].length ? 
+				delete result[region][''] //: null
 			}
-
 		}
-		
-		setTableHeaders(Object.keys(heads))
 		// remove loader
 		loader.parentNode.removeChild(loader)
 		// assign global variables
@@ -81,11 +82,11 @@ const RETRIEVER =
 		HEADS = heads
 		return {heads, result}
 	})
-	.catch(({message}) => {
-		console.log(message)
-		loader.parentNode.removeChild(loader)
-		alert('Couldn\'t load page. Please check your internet connection and reload.')
-	})
+	// .catch(({message}) => {
+	// 	console.log(message)
+	// 	loader.parentNode.removeChild(loader)
+	// 	alert('Couldn\'t load page. Please check your internet connection and reload.')
+	// })
 
 
 // Functions
@@ -99,17 +100,17 @@ String.prototype.toTitleCase = function () {
     	this
 }
 
-function flatText (string) {
+function flattenText (string) {
 	return string
-		.replace(/\[\d*\]|\n/gi, '')
+		.replace(/\[.+\]|\n/gi, '')
 		.replace(/ and ranked as.+\{\{.+\}\}/, '')
 }
 
 function getHeaders(thead) {
-	const headers = list(thead.firstElementChild.children)
+	const headers = Array(...thead.firstElementChild.children)
 
 	return headers.reduce((output, val, index) => {
-		output[flatText(val.textContent)] = index
+		output[flattenText(val.textContent)] = index
 		return output
 	}, {})
 }
@@ -120,7 +121,7 @@ function getRegion(table) {
 		'Ashanti Region' : 
 		sibling.innerText
 
-	return region.replace('[edit]', '')
+	return region.replace(/\[.+\]/, '')
 }
 
 function getDistrict(row) {
@@ -132,10 +133,10 @@ function getDistrict(row) {
 
 function getRowData(row, src_obj) {
 	const data = {}
-	for (key in src_obj) {
+	for (let key in src_obj) {
 		if (key) {
 			elm = row[src_obj[key]+'']
-			let text = flatText(
+			let text = flattenText(
 				['School', 'Website']
 				.includes(key) ? elm.innerHTML : elm.innerText
 			)
@@ -174,18 +175,10 @@ function cleanUpType(string) {
 			SCHOOL_TYPES.add(string)
 		}
 	}
-
 	return string
 }
 
-function setTableHeaders(arr) {
-	// set table headers
-	arr.forEach(th => {
-		TABLE_HEAD.insertAdjacentHTML('beforeend', `<th>${th}</th>`)
-	}) 
-}
-
-function populateTableBody(obj) {
+function createTableRow(obj) {
 	const vals = Object.values(obj)
 	const arr = vals.slice(0, vals.length-2)
 
@@ -199,11 +192,17 @@ function populateTableBody(obj) {
 	tr.setAttribute('district', obj.district)
 	tr.setAttribute('type', vals[1])
 	tr.setAttribute('title', `${obj.region} - ${obj.district}`)
-	TABLE_BODY.appendChild(tr)
+	// TABLE_BODY.appendChild(tr)
+	// const children = TABLE_BODY.children
+	// const last_child = children[children.length-1]
 	// fix hyperlinks
-	const children = TABLE_BODY.children
-	const last_child = children[(children.length-1) + '']
-	for (anchor of last_child.getElementsByTagName('a')) {
+	fixHyperlink(...tr.getElementsByTagName('a'))
+
+	return tr
+}
+
+function fixHyperlink (...anchors) {
+	for (let anchor of anchors) {
 		const href = anchor.getAttribute('href')
 		anchor.setAttribute(
 			'href', 
