@@ -10,21 +10,11 @@
 </head>
 <body>
 	<div id="loader"></div>
-	<header>
-		<h1>Senior High Schools in Ghana - Filterable Table</h1>
-		<small class="made-by">
-			Made with 💖 by
-			<a href=https://github.com/pyplacca target="_blank">David Placca</a>
-		</small>
-		<br>
-		<small>
-			data source: 
-			<a href="https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana" target="_blank">Wikipedia</a>
-		</small>
-	</header>
-	<div class="container">
-		<div class="filter">
-			<h3>Filter By:</h3>
+	<!-- filters section -->
+	<div class="filter">
+		<div class="toggle-view"></div>
+		<h3>Filter By</h3>
+		<div class="categories">
 			<div class="select" id="region">
 				<h4 class="header" title="Click to collapse">Region</h4>
 				<div class="options">
@@ -44,8 +34,21 @@
 				</div>
 			</div>
 		</div>
+	</div>
+	<!-- main container with table  -->
+	<div class="container">
+		<h1 style="margin-top: 0">Senior High Schools in Ghana - Filterable Table</h1>
+		<small class="made-by">
+			Made with 💖 by
+			<a href=https://github.com/pyplacca target="_blank">David Placca</a>
+		</small>
+		<br>
+		<small>
+			data source: 
+			<a href="https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana" target="_blank">Wikipedia</a>
+		</small>
 		<div class="table-container">
-			<p class="results">
+			<p class="results" style="display: none">
 				Showing results for 
 				<strong id="res-type">All Types</strong> 
 				in 
@@ -53,15 +56,19 @@
 				of 
 				<strong id="res-region">All Regions</strong>
 			</p>
-			<table>
-				<thead>
-					<tr></tr>
-				</thead>
-				<tbody></tbody>
-			</table>
+			<div class="table-main">
+				<table>
+					<thead>
+						<tr></tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
 		</div>
 	</div>
+
 	<script src="crawler.js"></script>
 	<script src="index.js"></script>
+	<script src="swipe.js"></script>
 </body>
 </html>
