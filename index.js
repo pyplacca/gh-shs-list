@@ -53,10 +53,10 @@ RETRIEVER
 		}
 	})
 })
-// .catch(({message}) => {
-// 	console.log(message)
-// 	LOADER.parentNode.removeChild(LOADER)
-// })
+.catch(({message}) => {
+	console.log(message)
+	LOADER.parentNode.removeChild(LOADER)
+})
 
 function sortTable(rows, by, reverse=false) {
 	const len = rows.length
