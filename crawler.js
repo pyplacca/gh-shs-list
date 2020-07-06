@@ -82,11 +82,11 @@ const RETRIEVER =
 		HEADS = heads
 		return {heads, result}
 	})
-	// .catch(({message}) => {
-	// 	console.log(message)
-	// 	loader.parentNode.removeChild(loader)
-	// 	alert('Couldn\'t load page. Please check your internet connection and reload.')
-	// })
+	.catch(({message}) => {
+		console.log(message)
+		loader.parentNode.removeChild(loader)
+		alert('Couldn\'t load page. Please check your internet connection and reload.')
+	})
 
 
 // Functions
