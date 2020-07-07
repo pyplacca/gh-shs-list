@@ -1,6 +1,6 @@
 # gh-shs-list
 A tabulated list of Senior High Schools in Ghana with sorting and filtering functionalities. 
-This website helps JHS grads and anyone easily identify SHS schools in various districts and regions in the country.
+This webpage helps JHS grads and anyone easily find SHSs in various districts and regions in the country.
 
 # Screenshot
 
