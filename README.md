@@ -1,6 +1,7 @@
 # gh-shs-list [![Netlify Status](https://api.netlify.com/api/v1/badges/4c1d1e08-8903-4f80-825d-f222605ab4d1/deploy-status)](https://app.netlify.com/sites/gh-shs-list/deploys)
 A tabulated list of Senior High Schools in Ghana with sorting and filtering functionalities. 
 This webpage helps JHS grads and anyone easily find SHSs in various districts and regions in the country.
+
 Unfortunately, this page isn't mobile friendly. Well, not yet.
 
 # Screenshot
