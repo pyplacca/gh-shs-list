@@ -17,7 +17,7 @@ const [
 ]
 
 
-const RETRIEVER = 
+const RETRIEVER =
 	fetch(cors_api + wiki_url)
 	.then(res => res.text())
 	.then(text => {
@@ -34,7 +34,7 @@ const RETRIEVER =
 		for (i=1; i < tables.length; i++) {
 			const table = tables[i + '']
 			const tbody = table.children['0']
-				
+
 			const region = getRegion(table)
 			heads = getHeaders(tbody)
 
@@ -49,7 +49,7 @@ const RETRIEVER =
 					result[region][district] = []
 					continue
 				}
-				
+
 				if (!district) {
 					district = none
 					result[region][district] = []
@@ -71,7 +71,7 @@ const RETRIEVER =
 			}
 
 			if ('' in result[region]) {
-				// !result[region][''].length ? 
+				// !result[region][''].length ?
 				delete result[region][''] //: null
 			}
 		}
@@ -83,7 +83,7 @@ const RETRIEVER =
 		return {heads, result}
 	})
 	.catch(({message}) => {
-		console.log(message)
+		// console.log(message)
 		loader.parentNode.removeChild(loader)
 		alert('Couldn\'t load page. Please check your internet connection and reload.')
 	})
@@ -92,11 +92,13 @@ const RETRIEVER =
 // Functions
 
 String.prototype.toTitleCase = function () {
-    return this ? 
+    return this
+    	?
     	this
 	    	.split(' ')
 	    	.map(w => w ? w[0].toUpperCase() + w.substr(1).toLowerCase() : w)
-	    	.join(' ') : 
+	    	.join(' ')
+	    :
     	this
 }
 
@@ -117,8 +119,8 @@ function getHeaders(thead) {
 
 function getRegion(table) {
 	let sibling = table.previousElementSibling
-	const region = sibling.localName == 'p' ? 
-		'Ashanti Region' : 
+	const region = sibling.localName == 'p' ?
+		'Ashanti Region' :
 		sibling.innerText
 
 	return region.replace(/\[.+\]/, '')
@@ -184,30 +186,28 @@ function createTableRow(obj) {
 
 	const tr = document.createElement('tr')
 	arr.forEach(info => tr.insertAdjacentHTML(
-		'beforeend', 
+		'beforeend',
 		`<td>${info}</td>`
 	))
-	// set attributes for easy filtering
-	tr.setAttribute('region', obj.region)
-	tr.setAttribute('district', obj.district)
-	tr.setAttribute('type', vals[1])
+	// set data attributes for easy filtering
+	// these data attributes can be accessed from the element's dataset object
+	tr.setAttribute('data-region', obj.region)
+	tr.setAttribute('data-district', obj.district)
+	tr.setAttribute('data-type', vals[1])
 	tr.setAttribute('title', `${obj.region} - ${obj.district}`)
-	// TABLE_BODY.appendChild(tr)
-	// const children = TABLE_BODY.children
-	// const last_child = children[children.length-1]
-	// fix hyperlinks
-	fixHyperlink(...tr.getElementsByTagName('a'))
+	// fix links
+	correctLink(...tr.getElementsByTagName('a'))
 
 	return tr
 }
 
-function fixHyperlink (...anchors) {
+function correctLink (...anchors) {
 	for (let anchor of anchors) {
 		const href = anchor.getAttribute('href')
 		anchor.setAttribute(
-			'href', 
+			'href',
 			(!href.startsWith('http') ? 'https://wikipedia.org/' : '') + href
-		) 
+		)
 		anchor.setAttribute('target', '_blank')
 	}
 }

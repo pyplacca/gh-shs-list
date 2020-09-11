@@ -1,7 +1,7 @@
 const filters = {
-	Region 	: ['All', filterTableByRegion], 
+	Region 	: ['All', filterTableByRegion],
 	District: ['All', filterTable],
-	Type 	: ['All', filterTable], 
+	Type 	: ['All', filterTable],
 }
 
 const container = document.querySelector('.container')
@@ -29,8 +29,8 @@ RETRIEVER
 	document.querySelector('thead tr')
 	.addEventListener('click', function ({target}) {
 		const sort_orders = {
-			'neutral': 'ascending', 
-			'ascending':'descending', 
+			'neutral': 'ascending',
+			'ascending':'descending',
 			'descending':'ascending'
 		}
 		// initiate sorting
@@ -40,7 +40,7 @@ RETRIEVER
 
 			container.style.cursor = 'progress'
 			renderTableBody(
-				sort_by=target.innerText, 
+				sort_by=target.innerText,
 				reversed=(order === 'descending')
 			)
 
@@ -54,28 +54,24 @@ RETRIEVER
 	})
 })
 .catch(({message}) => {
-	console.log(message)
+	// console.log(message)
 	LOADER.parentNode.removeChild(LOADER)
 })
 
 function sortTable(rows, by, reverse=false) {
 	const len = rows.length
-	
+	const value = arg => rows[arg].children[HEADS[by]].innerText
+
 	let i = 0
 	while (i < len) {
 		let j = i + 1
+		const l = value(i)
 
 		while (j < len) {
-			const [l, r] = [i, j].map(p => rows[p].children[HEADS[by]].innerText)
+			const r = value(j)
 
-			if (reverse) {
-				if (r > l) {
-					[rows[j], rows[i]] = [rows[i], rows[j]]
-				}
-			} else {
-				if (r < l) {
-					[rows[j], rows[i]] = [rows[i], rows[j]]
-				}
+			if ((reverse && r > l) || (!reverse && r < l)) {
+				[rows[j], rows[i]] = [rows[i], rows[j]]
 			}
 			j++
 		}
@@ -118,10 +114,9 @@ function selectFilter () {
 
 		filters[select][0] = this.innerText
 
-		document
-			.querySelector('#res-' + select.toLowerCase())
-			.innerText = this.innerText === 'All' ? 
-				`All ${select}s` : 
+		window['res-' + select.toLowerCase()]
+			.innerText = this.innerText === 'All' ?
+				`All ${select}s` :
 					this.innerText
 
 		filters[select][1]()
@@ -132,14 +127,15 @@ function setTableHeaders(arr) {
 	// set table headers
 	arr.forEach((th, i) => {
 		TABLE_HEAD.insertAdjacentHTML(
-			'beforeend', 
+			'beforeend',
 			`<th sort-order=${!i ? 'ascending' : 'neutral'}>${th}</th>`
 		)
-	}) 
+	})
 }
 
 function setOptions (filter_name, arr, reset=false) {
 	const filter = document.querySelector(filter_name + ' .options')
+	// console.log(filter)
 
 	if (reset) {
 		resetOptions(filter)
@@ -169,11 +165,11 @@ function filterTableByRegion() {
 	// update district options with district of selected region
 	const region = filters.Region[0]
 	setOptions(
-		'#district', 
-		region in RESULT ? 
+		'#district',
+		region in RESULT ?
 			Object.keys(RESULT[region])
-			.filter(r => (r.match(/district/gi) || '').length < 2) : 
-		[], 
+			.filter(r => (r.match(/district/gi) || '').length < 2) :
+		[],
 		true
 	)
 	filters.District[0] = 'All'
@@ -182,18 +178,18 @@ function filterTableByRegion() {
 
 function filterTable() {
 	const [region, district, type] = Object.values(filters).map(v => v[0])
-	
+
 	for (let tr of TABLE_BODY.children)	 {
 		const [
-			region_attr, district_attr, type_attr
+			region_data, district_data, type_data
 		] = [
 			'region', 'district', 'type'
-		].map(f => tr.getAttribute(f))
+		].map(f => tr.dataset[f])
 
 		if (
-			(region === region_attr || region === 'All') &&
-			(district === district_attr || district === 'All') &&
-			(type_attr.includes(type) || type === 'All')
+			(region === region_data || region === 'All') &&
+			(district === district_data || district === 'All') &&
+			(type_data.includes(type) || type === 'All')
 		) {
 			tr.classList.replace('hide', 'show')
 			// an array of regional districts for selected region if changed
@@ -205,3 +201,17 @@ function filterTable() {
 }
 
 const getClassElems = cls => document.getElementsByClassName(cls);
+
+
+// toggle filter section on mobile devices
+const filter_tag = document.querySelector('.filter-icon')
+const filter_section = document.querySelector('.filter')
+filter_tag.addEventListener('click', event => {
+	filter_section.classList.toggle('show')
+})
+
+document.addEventListener('click', () => {
+	if (filter_section.classList.contains('show')) {
+		filter_section.classList.toggle('show')
+	}
+})
