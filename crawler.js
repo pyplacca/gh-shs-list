@@ -8,7 +8,7 @@ const [
 	SCHOOL_TYPES,
 	TABLE_ROWS
 ] = [
-	'https://cors-anywhere.herokuapp.com/',
+	'https://gss-cors.glitch.me/?url=',
 	'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
 	'Unknown',
 	['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q)),
