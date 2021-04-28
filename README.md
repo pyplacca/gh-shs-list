@@ -11,3 +11,6 @@ PS: *this page isn't mobile friendly. Well, not yet.*
 
 ## Update 
 We're currently experiencing some technical difficulties, and for this reason, the webpage might not load as expected but, we're working to restore everything back to normal
+
+## Update 2
+Issues resolved. Site is up and running
