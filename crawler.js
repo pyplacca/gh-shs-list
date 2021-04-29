@@ -4,14 +4,14 @@ const [
 	cors_api,
 	wiki_url,
 	none,
-	[TABLE_HEAD, TABLE_BODY, LOADER],
+	[TABLE_HEAD, TABLE_BODY, LOADERTEXT],
 	SCHOOL_TYPES,
 	TABLE_ROWS
 ] = [
 		'https://gss-cors.glitch.me/?url=',
 		'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
 		'Unknown',
-		['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q)),
+		['thead tr', 'tbody', '.loading-text'].map(q => document.querySelector(q)),
 		new Set(),
 		[]
 	]
@@ -19,7 +19,10 @@ const [
 
 const RETRIEVER =
 	fetch(cors_api + wiki_url)
-		.then(res => res.text())
+		.then(res => {
+			LOADERTEXT.textContent = 'Organizing data...'
+			return res.text()
+		})
 		.then(text => {
 			const [dom, result] = [
 				new DOMParser()
@@ -75,8 +78,6 @@ const RETRIEVER =
 					delete result[region][''] //: null
 				}
 			}
-			// remove loader
-			loader.parentNode.removeChild(loader)
 			// assign global variables
 			RESULT = result
 			HEADS = heads
@@ -84,8 +85,10 @@ const RETRIEVER =
 		})
 		.catch(({ message }) => {
 			// console.log(message)
-			loader.parentNode.removeChild(loader)
 			alert('Couldn\'t load page. Please check your internet connection and reload.')
+		})
+		.finally(() => {
+			document.body.classList.remove('loading')
 		})
 
 

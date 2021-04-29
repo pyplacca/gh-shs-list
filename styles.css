@@ -20,6 +20,33 @@ body {
 	font-family: Roboto, sans-serif;
 }
 
+body.loading > *:not(.loading-container) {
+	display: none;
+}
+
+body.loading .loading-container {
+	display: flex;
+	flex-direction: column;
+}
+
+.loading-container {
+	display: none;
+	width: 100vw;
+	height: 100vh;
+	align-items: center;
+	justify-content: center;
+}
+
+.loading-container span {
+	width: 20px;
+	height: 20px;
+	border: 1px solid grey;
+	border-radius: 50%;
+	border-bottom-color: transparent;
+	animation: spin 1s linear 0s infinite;
+	margin-bottom: 1rem;
+}
+
 /* ============================================== */
 #loader {
 	position: fixed;
@@ -325,5 +352,11 @@ thead th[sort-order="descending"] {
 @keyframes load {
 	to {
 		filter: hue-rotate(360deg);
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
 	}
 }
