@@ -8,104 +8,104 @@ const [
 	SCHOOL_TYPES,
 	TABLE_ROWS
 ] = [
-	'https://gss-cors.glitch.me/?url=',
-	'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
-	'Unknown',
-	['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q)),
-	new Set(),
-	[]
-]
+		'https://gss-cors.glitch.me/?url=',
+		'https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana',
+		'Unknown',
+		['thead tr', 'tbody', '#loader'].map(q => document.querySelector(q)),
+		new Set(),
+		[]
+	]
 
 
 const RETRIEVER =
 	fetch(cors_api + wiki_url)
-	.then(res => res.text())
-	.then(text => {
-		const [dom, result] = [
-			new DOMParser()
-			.parseFromString(text, 'text/html')
-			.body,
-			{}
-		]
-		const tables = dom.getElementsByTagName('table')
+		.then(res => res.text())
+		.then(text => {
+			const [dom, result] = [
+				new DOMParser()
+					.parseFromString(text, 'text/html')
+					.body,
+				{}
+			]
+			const tables = dom.getElementsByTagName('table')
 
-		// console.dir(tables)
-		let heads
-		for (i=1; i < tables.length; i++) {
-			const table = tables[i + '']
-			const tbody = table.children['0']
+			// console.dir(tables)
+			let heads
+			for (i = 1; i < tables.length; i++) {
+				const table = tables[i + '']
+				const tbody = table.children['0']
 
-			const region = getRegion(table)
-			heads = getHeaders(tbody)
+				const region = getRegion(table)
+				heads = getHeaders(tbody)
 
-			result[region] = {}
+				result[region] = {}
 
-			let district
-			for (let row of tbody.children) {
-				const childs = row.children
+				let district
+				for (let row of tbody.children) {
+					const childs = row.children
 
-				if (childs.length < 3) {
-					district = getDistrict(childs['0'])
-					result[region][district] = []
-					continue
+					if (childs.length < 3) {
+						district = getDistrict(childs['0'])
+						result[region][district] = []
+						continue
+					}
+
+					if (!district) {
+						district = none
+						result[region][district] = []
+					}
+
+					if (childs['0'].localName !== 'th') {
+						let row_data = getRowData(childs, heads)
+						result[region][district].push(
+							row_data
+						)
+						TABLE_ROWS.push(createTableRow(
+							Object.assign(row_data, { region, district })
+						))
+					}
 				}
 
-				if (!district) {
-					district = none
-					result[region][district] = []
+				if (!result[region][none].length) {
+					delete result[region][none]
 				}
 
-				if (childs['0'].localName !== 'th') {
-					let row_data = getRowData(childs, heads)
-					result[region][district].push(
-						row_data
-					)
-					TABLE_ROWS.push(createTableRow(
-						Object.assign(row_data, {region, district})
-					))
+				if ('' in result[region]) {
+					// !result[region][''].length ?
+					delete result[region][''] //: null
 				}
 			}
-
-			if (!result[region][none].length) {
-				delete result[region][none]
-			}
-
-			if ('' in result[region]) {
-				// !result[region][''].length ?
-				delete result[region][''] //: null
-			}
-		}
-		// remove loader
-		loader.parentNode.removeChild(loader)
-		// assign global variables
-		RESULT = result
-		HEADS = heads
-		return {heads, result}
-	})
-	.catch(({message}) => {
-		// console.log(message)
-		loader.parentNode.removeChild(loader)
-		alert('Couldn\'t load page. Please check your internet connection and reload.')
-	})
+			// remove loader
+			loader.parentNode.removeChild(loader)
+			// assign global variables
+			RESULT = result
+			HEADS = heads
+			return { heads, result }
+		})
+		.catch(({ message }) => {
+			// console.log(message)
+			loader.parentNode.removeChild(loader)
+			alert('Couldn\'t load page. Please check your internet connection and reload.')
+		})
 
 
 // Functions
 
 String.prototype.toTitleCase = function () {
-    return this
-    	?
-    	this
-	    	.split(' ')
-	    	.map(w => w ? w[0].toUpperCase() + w.substr(1).toLowerCase() : w)
-	    	.join(' ')
-	    :
-    	this
+	return this
+		?
+		this
+			.split(' ')
+			.map(w => w ? w[0].toUpperCase() + w.substr(1).toLowerCase() : w)
+			.join(' ')
+		:
+		this
 }
 
-function flattenText (string) {
+function flattenText(string) {
 	return string
 		.replace(/\[.+\]|\n/gi, '')
-		.replace(/ and ranked as.+\{\{.+\}\}/, '')
+		.replace(/ and ranked as.+\{?\{?.+\}?\}?/, '')
 }
 
 function getHeaders(thead) {
@@ -137,10 +137,10 @@ function getRowData(row, src_obj) {
 	const data = {}
 	for (let key in src_obj) {
 		if (key) {
-			elm = row[src_obj[key]+'']
+			elm = row[src_obj[key] + '']
 			let text = flattenText(
 				['School', 'Website']
-				.includes(key) ? elm.innerHTML : elm.innerText
+					.includes(key) ? elm.innerHTML : elm.innerText
 			)
 
 			let temp
@@ -182,7 +182,7 @@ function cleanUpType(string) {
 
 function createTableRow(obj) {
 	const vals = Object.values(obj)
-	const arr = vals.slice(0, vals.length-2)
+	const arr = vals.slice(0, vals.length - 2)
 
 	const tr = document.createElement('tr')
 	arr.forEach(info => tr.insertAdjacentHTML(
@@ -201,7 +201,7 @@ function createTableRow(obj) {
 	return tr
 }
 
-function correctLink (...anchors) {
+function correctLink(...anchors) {
 	for (let anchor of anchors) {
 		const href = anchor.getAttribute('href')
 		anchor.setAttribute(
