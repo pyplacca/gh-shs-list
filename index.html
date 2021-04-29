@@ -19,6 +19,7 @@
 </head>
 <body>
 	<div id="loader"></div>
+	<button class="toggle">Toggle filter </button>
 	<!-- filters section -->
 	<div class="filter">
 		<!-- <div class="toggle-view"></div> -->
@@ -46,7 +47,6 @@
 	</div>
 	<!-- main container with table  -->
 	<main class="container">
-		<p class="toggle">Toggle filter </p>
 		<h1 style="margin-top: 0">Senior High Schools in Ghana</h1>
 		<small class="made-by">
 			Made with 💖 by
@@ -79,6 +79,23 @@
 
 	<script src="crawler.js"></script>
 	<script src="index.js"></script>
-	<script src="swipe.js"></script>
+	<!-- <script src="swipe.js"></script> -->
+	<script defer>
+		const sidebar = document.querySelector('.filter')
+
+		document.addEventListener('click', ({target}) => {
+			console.log(target)
+			const { classList } = target
+			if (classList.contains('option')) {
+				return
+			} else {
+				if (!classList.contains('toggle')) {
+					sidebar.classList.remove('show')
+				} else {
+					sidebar.classList.toggle('show')
+				}
+			}
+		})
+	</script>
 </body>
 </html>

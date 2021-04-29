@@ -13,7 +13,6 @@
 	--type-color: #ffa931;
 }
 
-
 body {
 	margin: 0;
 	display: flex;
@@ -41,31 +40,31 @@ body {
 /* Filters */
 
 .filter-icon {
-    position: fixed;
-    bottom: 4vw;
-    right: 5vw;
-    --s: 30px;
-    box-sizing: border-box;
-    padding: 1%;
-    height: var(--s);
-    width: var(--s);
-    border-radius: var(--pad);
-    box-shadow: 0 0 6px #0e0e0e;
-    z-index: 5;
+	position: fixed;
+	bottom: 4vw;
+	right: 5vw;
+	--s: 30px;
+	box-sizing: border-box;
+	padding: 1%;
+	height: var(--s);
+	width: var(--s);
+	border-radius: var(--pad);
+	box-shadow: 0 0 6px #0e0e0e;
+	z-index: 5;
 
-    -webkit-transition: transform .15s ease-in-out;
-    -moz-transition: transform .15s ease-in-out;
-    -ms-transition: transform .15s ease-in-out;
-    -o-transition: transform .15s ease-in-out;
-    transition: transform .15s ease-in-out;
+	-webkit-transition: transform 0.15s ease-in-out;
+	-moz-transition: transform 0.15s ease-in-out;
+	-ms-transition: transform 0.15s ease-in-out;
+	-o-transition: transform 0.15s ease-in-out;
+	transition: transform 0.15s ease-in-out;
 }
 
 .filter-icon:active {
-	-webkit-transform: scale(.95);
-	-moz-transform: scale(.95);
-	-ms-transform: scale(.95);
-	-o-transform: scale(.95);
-	transform: scale(.95);
+	-webkit-transform: scale(0.95);
+	-moz-transform: scale(0.95);
+	-ms-transform: scale(0.95);
+	-o-transform: scale(0.95);
+	transform: scale(0.95);
 }
 
 .filter-icon img {
@@ -79,48 +78,49 @@ body {
 	bottom: 3vw;
 	right: 5vw;
 	padding: 9px 15px;
-	font-size: .9rem;
+	font-size: 0.9rem;
 	border-radius: 50px;
 	box-shadow: 1px 0px 6px #909090;
 	z-index: 100;
 	background-color: #fff;
+	outline: none;
+	border: none;
 }
-
 
 .filter {
 	display: flex;
 	flex-direction: column;
 	min-width: 270px;
-    height: 100vh;
-    padding: 0;
+	max-width: 300px;
+	height: 100vh;
+	padding: 0;
 
 	position: fixed;
 	top: 0;
 	left: -105%;
 
-    border-right: 1px solid #dedede;
-    background-color: #fff;
+	border-right: 1px solid #dedede;
+	background-color: #fff;
 	overflow-y: auto;
 
 	box-shadow: 1px 0px 6px #909090;
 
-	transition: all .5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 	z-index: 100;
-
 }
 
 .filter.show {
-	left: 0%;
+	left: 0;
 }
 
 .filter > h3 {
-    position: sticky;
-    top: 0;
-    margin: 0;
+	position: sticky;
+	top: 0;
+	margin: 0;
 	padding: 15px 25px;
-    border-bottom: 1px solid #dedede;
+	border-bottom: 1px solid #dedede;
 
-    background-color: #f0f0f0;
+	background-color: #f0f0f0;
 }
 
 .filter .categories {
@@ -162,7 +162,7 @@ body {
 	padding: 15px 25px;
 	border-bottom: var(--bw) solid #d2d2d2;
 
-	font-size: .85rem;
+	font-size: 0.85rem;
 
 	cursor: pointer;
 }
@@ -200,7 +200,6 @@ body {
 	padding: calc(var(--pad) * 3);
 	overflow: auto;
 }
-
 
 /* Table */
 
@@ -270,15 +269,15 @@ thead th {
 	background-size: 15px;
 }
 
-thead th[sort-order='neutral'] {
+thead th[sort-order="neutral"] {
 	background-image: url("img/sort-neutral.png");
 }
 
-thead th[sort-order='ascending'] {
+thead th[sort-order="ascending"] {
 	background-image: url("img/sort-up.png");
 }
 
-thead th[sort-order='descending'] {
+thead th[sort-order="descending"] {
 	background-image: url("img/sort-down.png");
 }
 
@@ -288,16 +287,16 @@ thead th[sort-order='descending'] {
 
 /*.table-container::-webkit-scrollbar,*/
 .categories::-webkit-scrollbar {
-    width: var(--sbar);
-    border-radius: calc(var(--sbar) / 2);
-    background-color: #f0f0f0;
-    transition: width .5s ease-in-out;
+	width: var(--sbar);
+	border-radius: calc(var(--sbar) / 2);
+	background-color: #f0f0f0;
+	transition: width 0.5s ease-in-out;
 }
 
 /*.table-container::-webkit-scrollbar-thumb,*/
 .categories::-webkit-scrollbar-thumb {
-    background-color: #d2d2d2;
-    border-radius: calc(var(--sbar) / 2);
+	background-color: #d2d2d2;
+	border-radius: calc(var(--sbar) / 2);
 }
 
 @media screen and (min-width: 1024px) {
@@ -314,15 +313,17 @@ thead th[sort-order='descending'] {
 	}
 
 	.filter {
-	    position: sticky;
-	    box-shadow: none;
-	    min-width: 300px;
-	    left: 0;
+		position: sticky;
+		box-shadow: none;
+		min-width: 300px;
+		left: 0;
 	}
 }
 
 /* Animation */
 
 @keyframes load {
-	to { filter: hue-rotate(360deg); }
+	to {
+		filter: hue-rotate(360deg);
+	}
 }

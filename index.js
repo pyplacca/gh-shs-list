@@ -1,64 +1,64 @@
 const filters = {
-	Region 	: ['All', filterTableByRegion],
+	Region: ['All', filterTableByRegion],
 	District: ['All', filterTable],
-	Type 	: ['All', filterTable],
+	Type: ['All', filterTable],
 }
 
 const container = document.querySelector('.container')
 let sort_head = TABLE_HEAD.firstElementChild
 
 RETRIEVER
-.then(({heads, result}) => {
-	setTableHeaders(Object.keys(heads))
-	renderTableBody()
-	setOptions('#region', Object.keys(result))
-	setOptions('#type', SCHOOL_TYPES)
-	document.querySelector('.results').style.display = 'block'
+	.then(({ heads, result }) => {
+		setTableHeaders(Object.keys(heads))
+		renderTableBody()
+		setOptions('#region', Object.keys(result))
+		setOptions('#type', SCHOOL_TYPES)
+		document.querySelector('.results').style.display = 'block'
 
-	// bind event listeners
-	for (let opt of getClassElems('option locked')) {
-		opt.addEventListener('click', selectFilter, false)
-	}
-
-	for (let opt of getClassElems('header')) {
-		opt.addEventListener('click',  function () {
-			this.parentNode.classList.toggle('collapsed')
-		}, false)
-	}
-
-	document.querySelector('thead tr')
-	.addEventListener('click', function ({target}) {
-		const sort_orders = {
-			'neutral': 'ascending',
-			'ascending':'descending',
-			'descending':'ascending'
+		// bind event listeners
+		for (let opt of getClassElems('option locked')) {
+			opt.addEventListener('click', selectFilter, false)
 		}
-		// initiate sorting
-		if (target.localName == 'th') {
-			const order = sort_orders[target.getAttribute('sort-order')]
-			target.setAttribute('sort-order', order)
 
-			container.style.cursor = 'progress'
-			renderTableBody(
-				sort_by=target.innerText,
-				reversed=(order === 'descending')
-			)
-
-			if (sort_head && sort_head.innerText !== target.innerText) {
-				sort_head.setAttribute('sort-order', 'neutral')
-			}
-			// keep track of which table head is currently used to sort the table
-			sort_head = target
-			container.style.cursor = 'initial'
+		for (let opt of getClassElems('header')) {
+			opt.addEventListener('click', function () {
+				this.parentNode.classList.toggle('collapsed')
+			}, false)
 		}
+
+		document.querySelector('thead tr')
+			.addEventListener('click', function ({ target }) {
+				const sort_orders = {
+					'neutral': 'ascending',
+					'ascending': 'descending',
+					'descending': 'ascending'
+				}
+				// initiate sorting
+				if (target.localName == 'th') {
+					const order = sort_orders[target.getAttribute('sort-order')]
+					target.setAttribute('sort-order', order)
+
+					container.style.cursor = 'progress'
+					renderTableBody(
+						sort_by = target.innerText,
+						reversed = (order === 'descending')
+					)
+
+					if (sort_head && sort_head.innerText !== target.innerText) {
+						sort_head.setAttribute('sort-order', 'neutral')
+					}
+					// keep track of which table head is currently used to sort the table
+					sort_head = target
+					container.style.cursor = 'initial'
+				}
+			})
 	})
-})
-.catch(({message}) => {
-	// console.log(message)
-	LOADER.parentNode.removeChild(LOADER)
-})
+	.catch(({ message }) => {
+		// console.log(message)
+		LOADER.parentNode.removeChild(LOADER)
+	})
 
-function sortTable(rows, by, reverse=false) {
+function sortTable(rows, by, reverse = false) {
 	const len = rows.length
 	const value = arg => rows[arg].children[HEADS[by]].innerText
 
@@ -80,9 +80,9 @@ function sortTable(rows, by, reverse=false) {
 	return rows
 }
 
-function renderTableBody(sort_by='School', reversed=false) {
+function renderTableBody(sort_by = 'School', reversed = false) {
 	// sort table rows...
-	sortTable(TABLE_ROWS, by=sort_by, reverse=reversed)
+	sortTable(TABLE_ROWS, by = sort_by, reverse = reversed)
 	TABLE_BODY.innerHTML = ''
 	// then re-insert them into the table body
 	for (let row of TABLE_ROWS) {
@@ -92,7 +92,7 @@ function renderTableBody(sort_by='School', reversed=false) {
 	return null
 }
 
-function selectFilter () {
+function selectFilter() {
 	if (!this.classList.contains('selected')) {
 		document.body.style.cursor = 'progress'
 		// remove "selected" tag from perviously selected option
@@ -117,7 +117,7 @@ function selectFilter () {
 		window['res-' + select.toLowerCase()]
 			.innerText = this.innerText === 'All' ?
 				`All ${select}s` :
-					this.innerText
+				this.innerText
 
 		filters[select][1]()
 	}
@@ -133,7 +133,7 @@ function setTableHeaders(arr) {
 	})
 }
 
-function setOptions (filter_name, arr, reset=false) {
+function setOptions(filter_name, arr, reset = false) {
 	const filter = document.querySelector(filter_name + ' .options')
 	// console.log(filter)
 
@@ -168,8 +168,8 @@ function filterTableByRegion() {
 		'#district',
 		region in RESULT ?
 			Object.keys(RESULT[region])
-			.filter(r => (r.match(/district/gi) || '').length < 2) :
-		[],
+				.filter(r => (r.match(/district/gi) || '').length < 2) :
+			[],
 		true
 	)
 	filters.District[0] = 'All'
@@ -179,7 +179,7 @@ function filterTableByRegion() {
 function filterTable() {
 	const [region, district, type] = Object.values(filters).map(v => v[0])
 
-	for (let tr of TABLE_BODY.children)	 {
+	for (let tr of TABLE_BODY.children) {
 		const [
 			region_data, district_data, type_data
 		] = [
@@ -201,17 +201,3 @@ function filterTable() {
 }
 
 const getClassElems = cls => document.getElementsByClassName(cls);
-
-
-// toggle filter section on mobile devices
-const filter_tag = document.querySelector('.filter-icon')
-const filter_section = document.querySelector('.filter')
-filter_tag.addEventListener('click', event => {
-	filter_section.classList.toggle('show')
-})
-
-document.addEventListener('click', () => {
-	if (filter_section.classList.contains('show')) {
-		filter_section.classList.toggle('show')
-	}
-})
