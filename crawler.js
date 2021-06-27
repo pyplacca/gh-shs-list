@@ -31,6 +31,7 @@ const RETRIEVER =
 				{}
 			]
 			const tables = dom.getElementsByTagName('table')
+			// console.log({tables})
 
 			// console.dir(tables)
 			let heads
@@ -38,8 +39,11 @@ const RETRIEVER =
 				const table = tables[i + '']
 				const tbody = table.children['0']
 
+				// console.groupCollapsed({i, table, tbody})
 				const region = getRegion(table)
+				// console.log(region)
 				heads = getHeaders(tbody)
+				// console.log(heads)
 
 				result[region] = {}
 
@@ -58,7 +62,9 @@ const RETRIEVER =
 						result[region][district] = []
 					}
 
+					// console.log({childs, heads})
 					if (childs['0'].localName !== 'th') {
+						// console.log({childs, heads})
 						let row_data = getRowData(childs, heads)
 						result[region][district].push(
 							row_data
@@ -77,6 +83,7 @@ const RETRIEVER =
 					// !result[region][''].length ?
 					delete result[region][''] //: null
 				}
+				// console.groupEnd()
 			}
 			// assign global variables
 			RESULT = result
@@ -84,8 +91,8 @@ const RETRIEVER =
 			return { heads, result }
 		})
 		.catch(({ message }) => {
-			// console.log(message)
-			alert('Couldn\'t load page. Please check your internet connection and reload.')
+			console.error(message)
+			alert('Sorry! An unexpected error occured. Please contact developer')
 		})
 		.finally(() => {
 			document.body.classList.remove('loading')
@@ -111,9 +118,8 @@ function flattenText(string) {
 		.replace(/ and ranked as.+\{?\{?.+\}?\}?/, '')
 }
 
-function getHeaders(thead) {
-	const headers = Array(...thead.firstElementChild.children)
-
+function getHeaders(body) {
+	const headers = Array(...body.firstElementChild.children)
 	return headers.reduce((output, val, index) => {
 		output[flattenText(val.textContent)] = index
 		return output
@@ -141,10 +147,12 @@ function getRowData(row, src_obj) {
 	for (let key in src_obj) {
 		if (key) {
 			elm = row[src_obj[key] + '']
-			let text = flattenText(
-				['School', 'Website']
-					.includes(key) ? elm.innerHTML : elm.innerText
-			)
+			let text = elm
+				? flattenText(['School', 'Website'].includes(key)
+					? elm.innerHTML
+					: elm.innerText
+				)
+				: 'N/A'
 
 			let temp
 			if (key === 'Type') {
