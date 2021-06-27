@@ -315,7 +315,7 @@ thead th[sort-order="descending"] {
 /*.table-container::-webkit-scrollbar,*/
 .categories::-webkit-scrollbar {
 	width: var(--sbar);
-	border-radius: calc(var(--sbar) / 2);
+	/*border-radius: calc(var(--sbar) / 2);*/
 	background-color: #f0f0f0;
 	transition: width 0.5s ease-in-out;
 }
@@ -323,10 +323,10 @@ thead th[sort-order="descending"] {
 /*.table-container::-webkit-scrollbar-thumb,*/
 .categories::-webkit-scrollbar-thumb {
 	background-color: #d2d2d2;
-	border-radius: calc(var(--sbar) / 2);
+	/*border-radius: calc(var(--sbar) / 2);*/
 }
 
-@media screen and (min-width: 1024px) {
+@media screen and (min-width: 900px) {
 	:root {
 		--pad: 10px;
 	}
