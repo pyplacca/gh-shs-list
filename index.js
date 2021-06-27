@@ -54,8 +54,8 @@ RETRIEVER
 			})
 	})
 	.catch(({ message }) => {
-		// console.log(message)
-		LOADER.parentNode.removeChild(LOADER)
+		console.error(message)
+		// LOADER.parentNode.removeChild(LOADER)
 	})
 
 function sortTable(rows, by, reverse = false) {
