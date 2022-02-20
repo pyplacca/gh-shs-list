@@ -53,12 +53,12 @@
 	<main class="container">
 		<h1 style="margin-top: 0">Senior High Schools in Ghana</h1>
 		<small class="made-by">
-			Made with 💖 by
+			Developer:
 			<a href=https://github.com/pyplacca target="_blank">David Placca</a>
 		</small>
 		<br>
 		<small>
-			data source:
+			Data source:
 			<a href="https://en.wikipedia.org/wiki/List_of_senior_high_schools_in_Ghana" target="_blank">Wikipedia</a>
 		</small>
 		<div class="table-container">
@@ -88,7 +88,6 @@
 		const sidebar = document.querySelector('.filter')
 
 		document.addEventListener('click', ({target}) => {
-			console.log(target)
 			const { classList } = target
 			if (classList.contains('option')) {
 				return

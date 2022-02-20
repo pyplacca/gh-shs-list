@@ -142,6 +142,7 @@ function setOptions(filter_name, arr, reset = false) {
 	}
 
 	Array(...arr).sort().forEach(item => {
+		// console.log(item)
 		if (item) {
 			const option = document.createElement('p')
 			option.classList.add('option')

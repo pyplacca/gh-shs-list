@@ -75,13 +75,17 @@ const RETRIEVER =
 					}
 				}
 
-				if (!result[region][none].length) {
+				if (!result[region][none]?.length) {
 					delete result[region][none]
 				}
 
 				if ('' in result[region]) {
 					// !result[region][''].length ?
 					delete result[region][''] //: null
+				}
+
+				if (!Object.keys(result[region]).length) {
+					delete result[region]
 				}
 				// console.groupEnd()
 			}

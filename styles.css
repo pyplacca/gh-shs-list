@@ -40,7 +40,7 @@ body.loading .loading-container {
 .loading-container span {
 	width: 20px;
 	height: 20px;
-	border: 1px solid grey;
+	border: 3px solid grey;
 	border-radius: 50%;
 	border-bottom-color: transparent;
 	animation: spin 1s linear 0s infinite;
