@@ -41,6 +41,9 @@ const RETRIEVER =
 
 				// console.groupCollapsed({i, table, tbody})
 				const region = getRegion(table)
+				if (region.startsWith('\n') || region.startsWith('.')) {
+					continue
+				}
 				// console.log(region)
 				heads = getHeaders(tbody)
 				// console.log(heads)
